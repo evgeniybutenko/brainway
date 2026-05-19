@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package brainway.v1;
+
+option go_package = "github.com/example/brainway/pb;pb";
+
+message Transaction {
+  string id       = 1;
+  string user_id  = 2;
+  double amount   = 3;
+  string currency = 4;
+}
+
+message FailedTransaction {
+  string id     = 1;
+  string reason = 2;
+}
+
+message BatchRequest {
+  repeated Transaction transactions = 1;
+}
+
+message BatchResponse {
+  int32                      queued_count = 1;
+  repeated FailedTransaction failed       = 2;
+}
+
+service TransactionService {
+  rpc IngestBatch(BatchRequest) returns (BatchResponse);
+}
